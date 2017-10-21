@@ -1,12 +1,19 @@
-var http = require('http');
+const express = require('express')
+const bodyParser = require('body-parser');
 
-var server = http.createServer(function(request, response) {
-    response.writeHead(200, {"Content-Type": "text/plain"});
-    response.end("Hello World!");
-    console.log(request);
-});
+const app = express()
 
-var port = process.env.PORT || 1337;
-server.listen(port);
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-console.log("Server running at http://localhost:%d", port);
+app.get('/', function (req, res) {
+  res.send('Hello World!')
+})
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!')
+})
+
+app.post('/',function(req, res) {
+
+})
