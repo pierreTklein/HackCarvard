@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "now": "^8.3.10",
+    "request": "^2.83.0"
   }
 }
