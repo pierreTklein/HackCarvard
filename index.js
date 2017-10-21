@@ -1,5 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser');
+const cheerio = require('cheerio')
+const request = require('request');
 
 const app = express()
 
@@ -14,7 +16,30 @@ app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
 //make sure that api endpoint addresses start with /api/...
-app.post('/api/reviews', function(req, res) {
-    var make = req.body.make;
-    var model = req.body.model;
-});
+// app.post('/api/reviews', function(req, res) {
+//     var make = req.body.make;
+//     var model = req.body.model;
+// });
+
+var make1 = 'subaru'
+var make2 = 'forester'
+
+var car = 'https://www.google.com/search?q=' + make1 + '+' + make2 + '+' + 'price'
+
+function getPrice(url){
+  request(url, function(err, response, body){
+
+    const $ = cheerio.load(body)
+    // console.log('scraping ' + url)
+    let price = $("span._tA:contains('From')").val()
+    console.log(price);
+    // console.log($.html())
+  })
+}
+
+getPrice(car)
+
+// app.get('/api/getstats', function(req, res){
+//   getPrice()
+//
+// })
