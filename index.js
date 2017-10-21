@@ -13,7 +13,8 @@ app.get('/', function (req, res) {
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
-
-app.post('/',function(req, res) {
-
-})
+//make sure that api endpoint addresses start with /api/...
+app.post('/api/reviews', function(req, res) {
+    var make = req.body.make;
+    var model = req.body.model;
+});
