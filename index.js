@@ -31,9 +31,8 @@ function getPrice(url){
 
     const $ = cheerio.load(body)
     // console.log('scraping ' + url)
-    let price = $("span._tA:contains('From')").val()
-    console.log(price);
-    // console.log($.html())
+    console.log($.html())
+    price = $
   })
 }
 
