@@ -10,9 +10,13 @@ app.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
-})
+// Start the server
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+  console.log('Press Ctrl+C to quit.');
+});
+
 //make sure that api endpoint addresses start with /api/...
 app.post('/api/reviews', function(req, res) {
     var make = req.body.make;
