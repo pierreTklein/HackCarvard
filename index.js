@@ -22,35 +22,56 @@ app.listen(3000, function() {
 //     var model = req.body.model;
 // });
 
-
 // GET CAR PRICES
 
-app.post('/api/getstats', function(req, res) {
+app.post('/api/getStats', function(req, res) {
 
-  var make1 = req.body.make
-  var make2 = req.body.model
+  var make = req.body.make
+  var model = req.body.model
 
-  var car = 'https://www.google.com/search?q=' + make1 + '+' + make2 + '+' + 'price'
 
-  function getPrice(url) {
-    request(url, function(err, response, body) {
+  Promise.all([
+   api.getPrice(make, model),
+   api.getStats(make, model)
+ ])
+ .then(result => {
+   const data = {
+     price: result[0].price,
+     horsepower: result[1].horsepower,
+     transmision: result[1].transmision
+   }
+   res.send(data)
+  // console.log(result)
+ })
+        // res.send()
 
-      const $ = cheerio.load(body)
-      let price = $("span._tA:contains('From')").text().split(" ")[1]
-      console.log('Price: ' + price);
-    })
-  }
-
-  getPrice(car)
-
-  var baseURL = 'https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getTrims&make=' + make1 + '&model=' + make2
-
-  request(baseURL, function(err, res, body) {
-    console.log('Error: ' + err);
-    var jsonResult = body.slice(2,-2)
-    var jsonFinal = JSON.parse(jsonResult)
-    console.log('Horsepower: ' + jsonFinal.Trims[0].model_engine_power_ps);
-    console.log('Transmission Type: ' + jsonFinal.Trims[0].model_transmission_type);
-  })
 
 })
+
+const api = {
+  getPrice: (make, model) => {
+    return new Promise((resolve, reject) => {
+      var car = 'https://www.google.com/search?q=' + make + '+' + model + '+' + 'price'
+      request(car, function(err, response, body) {
+        if (err) reject(err)
+        const $ = cheerio.load(body)
+        let price = $("span._tA:contains('From')").text().split(" ")[1]
+        resolve({price: price})
+      })
+    })
+  },
+  getStats: (make, model) => {
+    return new Promise((resolve, reject) => {
+      var baseURL = 'https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getTrims&make=' + make + '&model=' + model
+
+      request(baseURL, function(err, response, body) {
+        if(err) reject(err)
+        var jsonResult = body.slice(2, -2)
+        var jsonFinal = JSON.parse(jsonResult)
+        horsepower = jsonFinal.Trims[0].model_engine_power_ps
+        transmision = jsonFinal.Trims[0].model_transmission_type
+        resolve({horsepower: horsepower, transmision: transmision})
+      })
+    })
+  }
+}
