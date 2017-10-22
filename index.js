@@ -9,7 +9,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.get('/', function (req, res) {
-  res.send('Hello World!')
+  res.send('Please check out Hack Harvard')
 })
 
 app.listen(3000, function () {
@@ -32,7 +32,7 @@ function getRating(url, response){
     let ratingTextOutOf10 = $("div._Fng:contains('/10')").text();
     var ratingText = ratingTextOutOf5+ratingTextOutOf10;
     //SUPER JANK, I KNOW... That's the unicode value of the element that splits the rating from the source.
-    //This gives: [4.5/5,'edmunds3/5','car source']
+    //This gives: ['4.5/5','edmunds3/5','car source']
     var partialResult = ratingText.split(String.fromCharCode(65533));
     function RatingObj(){
       return {'rating':'n/a','source':'unknown'};      
