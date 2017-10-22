@@ -142,7 +142,6 @@ app.post('/api/getRating', function(req, res){
     response.send("Error while trying to get the rating");
   }
 })
-=======
 // Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
