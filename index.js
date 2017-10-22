@@ -79,7 +79,7 @@ app.post('/api/getPrice', function(req,res){
   var make = req.body.make;
   var model = req.body.model;
   try{
-    getRating(generateGoogleQuery(make, model), res);  
+    getPrice(generateGoogleQuery(make, model), res);  
   }
   catch(err)
   {
