@@ -1,5 +1,5 @@
 # HackCarvard
-An app that lets you take a photo of a car, and then get information about it.
+An app that tells you the type of car by just a picture.
 Uses Express.js, Node.js, and some great APIs, as well as some hacky web-scraping...
 
 
