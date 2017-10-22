@@ -8,9 +8,6 @@ const app = express()
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 
-app.get('/', function(req, res) {
-  res.send('Hello World!')
-})
 
 app.listen(3000, function() {
   console.log('Example app listening on port 3000!')
@@ -68,10 +65,84 @@ const api = {
         if(err) reject(err)
         var jsonResult = body.slice(2, -2)
         var jsonFinal = JSON.parse(jsonResult)
-        horsepower = jsonFinal.Trims[0].model_engine_power_ps
-        transmision = jsonFinal.Trims[0].model_transmission_type
+
+        horsepower = (jsonFinal.Trims[0]) ? jsonFinal.Trims[0].model_engine_power_ps : 'unknown'
+        transmision = (jsonFinal.Trims[0]) ? jsonFinal.Trims[0].model_transmission_type : 'unknown'
+
         resolve({horsepower: horsepower, transmision: transmision})
       })
     })
   }
 }
+
+app.get('/', function (req, res) {
+  res.send('Please check out Hack Harvard')
+})
+
+function getRating(url, response){
+  request(url, function(err, res, body){
+    const $ = cheerio.load(body);
+    let ratingTextOutOf5 = $("div._Fng:contains('/5')").text();
+    let ratingTextOutOf10 = $("div._Fng:contains('/10')").text();
+    var ratingText = ratingTextOutOf5+ratingTextOutOf10;
+    //SUPER JANK, I KNOW... That's the unicode value of the element that splits the rating from the source.
+    //This gives: ['4.5/5','edmunds3/5','car source']
+    var partialResult = ratingText.split(String.fromCharCode(65533));
+    function RatingObj(){
+      return {'rating':'n/a','source':'unknown'};
+    }
+    var actualRatingsAndSources = [];
+    //Go through all the ratings and add them to the array
+    for(var i = 0; i < partialResult.length; i++)
+    {
+      //Regexp that returns whether or not a given string contains some digit over 5, or some digit over 10.
+      var ratingRegexp = new RegExp(/(\d(.\d)?\/(5|10))/);
+      var sanitizedRatings = ratingRegexp.exec(partialResult[i]);
+      if(sanitizedRatings != null)
+      {
+        var nextRatingObj = new RatingObj();
+        nextRatingObj.rating = sanitizedRatings[0];
+        //this means that it's a combination of a source and a rating, e.g.: Edmunds3/5
+        if(sanitizedRatings[0] != partialResult[i])
+        {
+          //The result minus the rating is the previous rating's source.
+          actualRatingsAndSources[actualRatingsAndSources.length-1].source = partialResult[i].replace(ratingRegexp,'');
+        }
+        actualRatingsAndSources.push(nextRatingObj);
+      }
+      else if(actualRatingsAndSources.length > 0)
+      {
+        actualRatingsAndSources[actualRatingsAndSources.length-1].source = partialResult[i];
+      }
+    }
+    response.send(actualRatingsAndSources);
+  });
+}
+function generateGoogleQuery(make, model){
+  return 'https://www.google.com/search?q=' + make + '+' + model + '+' + 'price'
+}
+
+
+app.post('/api/getPrice', function(req,res){
+  var make = req.body.make;
+  var model = req.body.model;
+  try{
+    getPrice(generateGoogleQuery(make, model), res);
+  }
+  catch(err)
+  {
+    response.send("Error while trying to get the price");
+  }
+})
+
+app.post('/api/getRating', function(req, res){
+  var make = req.body.make;
+  var model = req.body.model;
+  try{
+    getRating(generateGoogleQuery(make, model), res);
+  }
+  catch(err)
+  {
+    response.send("Error while trying to get the rating");
+  }
+})

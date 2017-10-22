@@ -1,6 +1,7 @@
-# Node.js Hello World
+# HackCarvard
+An app that lets you take a photo of a car, and then get information about it.
+Uses Express.js, Node.js, and some great APIs, as well as some hacky web-scraping...
 
-This sample demonstrates a tiny Hello World node.js app for [App Service Web App](https://docs.microsoft.com/azure/app-service-web).
 
 # Contributing
 
