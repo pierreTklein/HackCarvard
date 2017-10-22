@@ -136,12 +136,6 @@ app.listen(PORT, () => {
   console.log('Press Ctrl+C to quit.');
 });
 
-//make sure that api endpoint addresses start with /api/...
-app.post('/api/reviews', function(req, res) {
-    var make = req.body.make;
-    var model = req.body.model;
-});
-
 // res = response
 app.post('/api/getmodel/', function(req, res) {
 
