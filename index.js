@@ -21,12 +21,12 @@ app.listen(3000, function () {
 //     var model = req.body.model;
 // });
 
-function getPrice(url){
-  request(url, function(err, response, body){
+function getPrice(url, response){
+  request(url, function(err, res, body){
 
     const $ = cheerio.load(body)
     let price = $("span._tA:contains('From')").text();
-    return price;
+    response.send({'price':price});
   })
 }
 
