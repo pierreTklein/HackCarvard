@@ -118,19 +118,6 @@ function generateGoogleQuery(make, model){
   return 'https://www.google.com/search?q=' + make + '+' + model + '+' + 'price'
 }
 
-
-app.post('/api/getPrice', function(req,res){
-  var make = req.body.make;
-  var model = req.body.model;
-  try{
-    getPrice(generateGoogleQuery(make, model), res);
-  }
-  catch(err)
-  {
-    response.send("Error while trying to get the price");
-  }
-})
-
 app.post('/api/getRating', function(req, res){
   var make = req.body.make;
   var model = req.body.model;
