@@ -7,7 +7,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.get('/', function (req, res) {
-  res.send('Hello World!')
+  res.send('Please connect to our app on the app-store!')
 })
 
 app.listen(3000, function () {
@@ -39,12 +39,16 @@ app.post('/api/getmodel/', function(req, res) {
 
 	request(options, function (error, response, body) {
 	  if (!error && response.statusCode == 200) {
-	  	json = JSON.parse(response.body);
-		// res.send('API for model of car ' + JSON.stringify(json["objects"]));
 	    res.send('API for model of car ' + JSON.stringify(response.body));
-	  } else {
-	  	res.send('There was an error processing the API call');
-	  }
+    } else if(error)
+    {
+	  	res.send('There was an error processing the API call'+JSON.stringify(error));
+    }
+    else
+    {
+	  	res.send(response.statusCode);
+      
+    }
 	});
 
 })
