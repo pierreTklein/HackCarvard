@@ -12,10 +12,6 @@ app.get('/', function (req, res) {
   res.send('Please check out Hack Harvard')
 })
 
-app.listen(3000, function () {
-  console.log('Running on port 3000');
-})
-
 function getPrice(url, response){
   request(url, function(err, res, body){
 
