@@ -13,13 +13,8 @@ app.get('/', function (req, res) {
 })
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
+  console.log('Running on port 3000');
 })
-//make sure that api endpoint addresses start with /api/...
-// app.post('/api/reviews', function(req, res) {
-//     var make = req.body.make;
-//     var model = req.body.model;
-// });
 
 function getPrice(url, response){
   request(url, function(err, res, body){
@@ -70,8 +65,7 @@ function getRating(url, response){
   });
 }
 function generateGoogleQuery(make, model){
-return 'https://www.google.com/search?q=' + make + '+' + model + '+' + 'price'
-
+  return 'https://www.google.com/search?q=' + make + '+' + model + '+' + 'price'
 }
 
 
