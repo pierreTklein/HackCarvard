@@ -25,10 +25,10 @@ app.listen(3000, function() {
 
 // GET CAR PRICES
 
-app.get('/api/getstats', function(req, res) {
+app.post('/api/getstats', function(req, res) {
 
-  var make1 = 'Ford'
-  var make2 = 'Explorer'
+  var make1 = req.body.make
+  var make2 = req.body.model
 
   var car = 'https://www.google.com/search?q=' + make1 + '+' + make2 + '+' + 'price'
 
