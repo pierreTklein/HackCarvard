@@ -67,3 +67,7 @@ app.post('/api/getmodel/', function(req, res) {
 	  }
 	});
 })
+
+app.post('/api/edmundsLink', function(req, res){
+  res.send('https://www.edmunds.com/'+req.body.make +'/' + req.body.model);
+})
